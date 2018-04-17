@@ -1,0 +1,62 @@
+services:
+    # util monolog formatter
+    notification.monolog.exception.formatter:
+        class: Monolog\Formatter\LineFormatter
+        calls:
+            - [includeStacktraces]
+
+    # mailer
+    notification.mailer:
+        class: NotificationBundle\Mailer\Mailer
+        arguments: ["@mailer", "@twig", "%mailer.emails%"]
+        calls:
+            - [ setSender, ["%mailer.sender_address%", "%mailer.sender_name%"] ]
+            - [ setSubjectTemplate, ["%mailer.subject_template%"] ]
+
+    # notification channel
+    monolog.logger.notification:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: ["notification"]
+        calls:
+            - {method: 'pushProcessor', arguments: ["@notification.processor"]}
+            - {method: 'pushHandler', arguments: ["@notification.processor.handler.doctrine_orm"]}
+            - {method: 'pushHandler', arguments: ["@notification.processor.handler.mailer"]}
+
+    # app notification registry
+    notification.registry:
+        class: NotificationBundle\Notification\NotificationRegistry
+        arguments:
+            - "@service_container"
+            - ~ #All services with tag "notification.type" are inserted here by NotificationPass
+
+    # app notification dispatcher
+    NotificationBundle\Notification\NotificationDispatcher:
+        class: NotificationBundle\Notification\NotificationDispatcher
+        arguments: ["@notification.registry", "@monolog.logger.notification", "@twig"]
+
+    notifier:
+        alias: notification.dispatcher
+
+    # app notification processor
+    notification.processor:
+        class: NotificationBundle\Notification\NotificationProcessor
+        arguments: ["@notification.processor.twig"]
+
+    notification.processor.twig:
+        class: Twig\Environment
+        public: false
+        arguments:
+          - "@twig.loader"
+          - autoescape: false
+
+    # app notification handler : mailer
+    notification.processor.handler.doctrine_orm:
+        class: NotificationBundle\Notification\Handler\DoctrineORMHandler
+        calls:
+            - {method: 'setEntityManager', arguments: ["@doctrine.orm.entity_manager"]}
+
+    # app notification handler : mailer
+    notification.processor.handler.mailer:
+        class: NotificationBundle\Notification\Handler\MailerHandler
+        calls:
+            - {method: 'setMailer', arguments: ["@notification.mailer"]}

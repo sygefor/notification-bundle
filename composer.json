@@ -1,0 +1,29 @@
+{
+    "name": "bundles/notification-bundle",
+    "description": "Notification bundle",
+    "type": "symfony-bundle",
+    "license": "proprietary",
+    "version": "1",
+    "authors": [
+        {
+            "name": "Conjecto",
+            "homepage": "http://www.conjecto.com/"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3",
+        "symfony/symfony": "^4.0",
+        "swiftmailer/swiftmailer": "^5.4",
+        "pelago/emogrifier": "^2.0",
+        "symfony/monolog-bundle": "^3.2",
+        "soundasleep/html2text": "^0.5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "NotificationBundle\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    }
+}
