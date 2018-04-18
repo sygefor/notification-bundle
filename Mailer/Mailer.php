@@ -4,6 +4,8 @@ namespace NotificationBundle\Mailer;
 
 use Pelago\Emogrifier;
 use Html2Text\Html2Text;
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
 use Symfony\Component\Cache\Exception\InvalidArgumentException;
 
 /**
@@ -44,9 +46,9 @@ class Mailer
     /**
      * Mailer constructor.
      *
-     * @param \Swift_Mailer     $mailer
+     * @param \Swift_Mailer $mailer
      * @param \Twig_Environment $twig
-     * @param array             $configuration
+     * @param array $configuration
      */
     public function __construct(\Swift_Mailer $mailer, \Twig_Environment $twig, array $configuration)
     {
@@ -82,6 +84,10 @@ class Mailer
      * @return int
      *
      * @throws \Html2Text\Html2TextException
+     * @throws \Throwable
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function send($code, $recipient, array $data = [], array $excludes = [])
     {
@@ -106,7 +112,8 @@ class Mailer
             $recipient = $recipient->getEmail();
         }
 
-        if(!\Swift_Validate::email($recipient)) {
+        $emailValidator = new EmailValidator();
+        if (!$emailValidator->isValid($recipient, (new RFCValidation()))) {
             return 0;
         }
 
@@ -121,8 +128,8 @@ class Mailer
 
         // precode the subject to avoid switfmailer bug
         // fix bug https://github.com/swiftmailer/swiftmailer/issues/665
-        $subject = '=?UTF-8?B?'.base64_encode($email->getSubject()).'?=';
-        $message = \Swift_Message::newInstance(null, null, 'text/html', null)
+        $subject = '=?UTF-8?B?' . base64_encode($email->getSubject()) . '?=';
+        $message = (new \Swift_Message(null, null, 'text/html', 'utf-8'))
             ->setSubject($subject)
             ->setFrom($email->getSenderAddress(), $email->getSenderName())
             ->setTo([$recipient]);
