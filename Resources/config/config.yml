@@ -30,12 +30,9 @@ services:
             - ~ #All services with tag "notification.type" are inserted here by NotificationPass
 
     # app notification dispatcher
-    NotificationBundle\Notification\NotificationDispatcher:
+    notification.dispatcher:
         class: NotificationBundle\Notification\NotificationDispatcher
         arguments: ["@notification.registry", "@monolog.logger.notification", "@twig"]
-
-    notifier:
-        alias: notification.dispatcher
 
     # app notification processor
     notification.processor:
