@@ -61,7 +61,7 @@ interface NotificationTypeInterface
     public function getExcludedRecipients();
 
     /**
-     * @return NotificationEntityInterface
+     * @return array|NotificationEntityInterface
      */
     public function getEntity();
 }
