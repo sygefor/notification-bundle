@@ -45,7 +45,6 @@ services:
         public: false
         arguments:
           - "@twig.loader"
-          - autoescape: false
 
     # app notification handler : mailer
     notification.processor.handler.doctrine_orm:
