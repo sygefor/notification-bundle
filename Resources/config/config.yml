@@ -33,6 +33,7 @@ services:
     # app notification dispatcher
     notification.dispatcher:
         class: NotificationBundle\Notification\NotificationDispatcher
+        public: true
         arguments: ["@notification.registry", "@monolog.logger.notification", "@twig"]
 
     # app notification processor
