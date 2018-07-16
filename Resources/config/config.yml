@@ -34,7 +34,7 @@ services:
     notification.dispatcher:
         class: NotificationBundle\Notification\NotificationDispatcher
         public: true
-        arguments: ["@notification.registry", "@monolog.logger.notification", "@twig"]
+        arguments: ["@doctrine.orm.entity_manager", "@notification.registry", "@monolog.logger.notification", "@twig"]
 
     # app notification processor
     notification.processor:

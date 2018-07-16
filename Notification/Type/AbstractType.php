@@ -3,6 +3,7 @@
 namespace NotificationBundle\Notification\Type;
 
 use Monolog\Logger;
+use Doctrine\ORM\EntityManager;
 use NotificationBundle\Notification\NotificationTypeInterface;
 
 /**
@@ -10,7 +11,19 @@ use NotificationBundle\Notification\NotificationTypeInterface;
  */
 abstract class AbstractType implements NotificationTypeInterface
 {
+    /** @var EntityManager */
+    protected $manager;
+
+    /** @var mixed */
     protected $subject;
+
+    /**
+     * @param EntityManager $manager
+     */
+    public function setManager(EntityManager $manager)
+    {
+        $this->manager = $manager;
+    }
 
     public function setSubject($subject)
     {
