@@ -16,7 +16,7 @@ class Mailer
     /**
      * @var \Swift_Mailer
      */
-    private $mailer;
+	protected $mailer;
 
     /**
      * @var \Twig_Environment
@@ -26,12 +26,12 @@ class Mailer
     /**
      * @var string
      */
-    private $senderAddress;
+	protected $senderAddress;
 
     /**
      * @var string
      */
-    private $senderName;
+	protected $senderName;
 
     /**
      * @var array
@@ -41,7 +41,7 @@ class Mailer
     /**
      * @var string
      */
-    private $subjectTemplate;
+	protected $subjectTemplate;
 
     /**
      * Mailer constructor.
@@ -151,7 +151,7 @@ class Mailer
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    private function getRenderedEmail($code, array $data)
+    protected function getRenderedEmail($code, array $data)
     {
         // load email from config
         $email = $this->getEmailFromConfiguration($code);
@@ -184,7 +184,7 @@ class Mailer
      *
      * @return Email
      */
-    private function getEmailFromConfiguration($code)
+	protected function getEmailFromConfiguration($code)
     {
         if (!isset($this->configuration[$code])) {
             throw new InvalidArgumentException(sprintf('Email with code "%s" does not exist!', $code));
