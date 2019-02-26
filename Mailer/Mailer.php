@@ -197,6 +197,7 @@ class Mailer
         $email->setSenderName($this->senderName);
         $email->setCode($code);
         $email->setTemplate($configuration['template']);
+	    $email->setAdditionalParams(isset($configuration['additionalParams']) ? $configuration['additionalParams'] : array());
 
         if (isset($configuration['subject'])) {
             $email->setSubject($configuration['subject']);

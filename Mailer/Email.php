@@ -42,6 +42,11 @@ class Email
      */
     private $senderName;
 
+	/**
+	 * @var array
+	 */
+    private $additionalParams;
+
     /**
      * @return string
      */
@@ -153,4 +158,40 @@ class Email
     {
         $this->senderName = $senderName;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getAdditionalParams()
+	{
+		return $this->additionalParams;
+	}
+
+	/**
+	 * @param array $additionalParams
+	 */
+	public function setAdditionalParams($additionalParams)
+	{
+		$this->additionalParams = $additionalParams;
+	}
+
+	/**
+	 * @param  string $key
+	 *
+	 * @return bool
+	 */
+	public function hasAdditionalParam($key)
+	{
+		return isset($this->additionalParams[$key]);
+	}
+
+	/**
+	 * @param  $key string
+	 *
+	 * @return mixed
+	 */
+	public function getAdditionalParam($key)
+	{
+		return $this->additionalParams[$key];
+	}
 }
